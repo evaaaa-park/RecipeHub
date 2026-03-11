@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:recipehub/core/constants/app_assets.dart';
+import 'package:recipehub/core/widgets/asset_image_with_fallback.dart';
 import 'package:recipehub/data/models/recipe.dart';
 import 'package:recipehub/data/repositories/recipe_repository.dart';
 import 'package:recipehub/features/saved_recipes/saved_recipes_provider.dart';
@@ -43,16 +43,9 @@ class RecipeDetailScreen extends StatelessWidget {
                 children: <Widget>[
                   Text(recipe.title, style: Theme.of(context).textTheme.titleLarge),
                   const SizedBox(height: 12),
-                  Image.asset(
-                    '${AppAssets.imageDirectory}${recipe.imageName}.jpg',
+                  AssetImageWithFallback(
+                    imageName: recipe.imageName,
                     height: 220,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return const SizedBox(
-                        height: 220,
-                        child: Center(child: Text('Image unavailable')),
-                      );
-                    },
                   ),
                   const SizedBox(height: 12),
                   FilledButton.icon(

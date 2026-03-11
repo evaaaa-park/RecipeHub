@@ -45,20 +45,25 @@ class CsvSeedParserService {
     int id = 1;
 
     for (int i = 1; i < rows.length; i++) {
-      final List<dynamic> row = rows[i];
-      final String name = _clean(_safeGet(row, ingredientIndex));
-      final String category = _clean(_safeGet(row, categoryIndex));
-      if (name.isEmpty || category.isEmpty) {
-        continue;
-      }
+      try {
+        final List<dynamic> row = rows[i];
+        final String name = _clean(_safeGet(row, ingredientIndex));
+        final String category = _clean(_safeGet(row, categoryIndex));
+        if (name.isEmpty || category.isEmpty) {
+          continue;
+        }
 
-      final String key = name.toLowerCase();
-      if (seenNames.contains(key)) {
+        final String key = name.toLowerCase();
+        if (seenNames.contains(key)) {
+          continue;
+        }
+        seenNames.add(key);
+        ingredients.add(Ingredient(id: id, name: name, category: category));
+        id++;
+      } catch (_) {
+        // Skip malformed rows without interrupting the seed process.
         continue;
       }
-      seenNames.add(key);
-      ingredients.add(Ingredient(id: id, name: name, category: category));
-      id++;
     }
     return ingredients;
   }
@@ -81,40 +86,45 @@ class CsvSeedParserService {
     final Set<int> seenIds = <int>{};
 
     for (int i = 1; i < rows.length; i++) {
-      final List<dynamic> row = rows[i];
-      final int? id = _tryParseInt(_safeGet(row, idIndex));
-      final String title = _clean(_safeGet(row, titleIndex));
-      final String ingredientsRaw = _clean(_safeGet(row, ingredientsIndex));
-      final String instructions = _clean(_safeGet(row, instructionsIndex));
-      final String imageName = _clean(_safeGet(row, imageIndex));
-      String cleanedIngredients = _clean(_safeGet(row, cleanedIndex));
+      try {
+        final List<dynamic> row = rows[i];
+        final int? id = _tryParseInt(_safeGet(row, idIndex));
+        final String title = _clean(_safeGet(row, titleIndex));
+        final String ingredientsRaw = _clean(_safeGet(row, ingredientsIndex));
+        final String instructions = _clean(_safeGet(row, instructionsIndex));
+        final String imageName = _clean(_safeGet(row, imageIndex));
+        String cleanedIngredients = _clean(_safeGet(row, cleanedIndex));
 
-      if (id == null ||
-          title.isEmpty ||
-          ingredientsRaw.isEmpty ||
-          instructions.isEmpty) {
+        if (id == null ||
+            title.isEmpty ||
+            ingredientsRaw.isEmpty ||
+            instructions.isEmpty) {
+          continue;
+        }
+
+        if (seenIds.contains(id)) {
+          continue;
+        }
+        seenIds.add(id);
+
+        if (cleanedIngredients.isEmpty) {
+          cleanedIngredients = ingredientsRaw;
+        }
+
+        recipes.add(
+          Recipe(
+            id: id,
+            title: title,
+            ingredientsRaw: ingredientsRaw,
+            instructions: instructions,
+            imageName: imageName,
+            cleanedIngredients: cleanedIngredients,
+          ),
+        );
+      } catch (_) {
+        // Ignore malformed/extra-column rows and keep parsing.
         continue;
       }
-
-      if (seenIds.contains(id)) {
-        continue;
-      }
-      seenIds.add(id);
-
-      if (cleanedIngredients.isEmpty) {
-        cleanedIngredients = ingredientsRaw;
-      }
-
-      recipes.add(
-        Recipe(
-          id: id,
-          title: title,
-          ingredientsRaw: ingredientsRaw,
-          instructions: instructions,
-          imageName: imageName,
-          cleanedIngredients: cleanedIngredients,
-        ),
-      );
     }
     return recipes;
   }

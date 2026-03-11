@@ -34,9 +34,13 @@ class RecipeResultsScreen extends StatelessWidget {
                 const Expanded(
                   child: Center(child: Text('Select at least one fridge ingredient')),
                 )
+              else if (!provider.hasSearched)
+                const Expanded(
+                  child: Center(child: Text('Run a search to see recipe matches')),
+                )
               else if (provider.results.isEmpty)
                 const Expanded(
-                  child: Center(child: Text('No matching recipes yet')),
+                  child: Center(child: Text('No recipe matches found')),
                 )
               else
                 Expanded(

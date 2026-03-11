@@ -15,14 +15,17 @@ class RecipeResultsProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   bool _noSelection = false;
+  bool _hasSearched = false;
   List<RecipeMatchResult> _results = const <RecipeMatchResult>[];
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get noSelection => _noSelection;
+  bool get hasSearched => _hasSearched;
   List<RecipeMatchResult> get results => _results;
 
   Future<void> searchFromSelectedFridgeIngredients() async {
+    _hasSearched = true;
     _setLoading(true);
     try {
       final selectedItems = await _fridgeRepository.getSelectedFridgeItems();
@@ -52,6 +55,7 @@ class RecipeResultsProvider extends ChangeNotifier {
   void clearState() {
     _results = const <RecipeMatchResult>[];
     _noSelection = false;
+    _hasSearched = false;
     _errorMessage = null;
     notifyListeners();
   }
