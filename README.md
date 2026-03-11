@@ -1,17 +1,56 @@
-# recipehub
+# RecipeHub
 
-A new Flutter project.
+RecipeHub is a local-first Flutter app for ingredient browsing, fridge tracking, recipe matching, recipe details, and local save/unsave flow.
 
-## Getting Started
+## Tech Stack
+- Flutter / Dart
+- SQLite (`sqflite`)
+- SharedPreferences
+- Provider
+- CSV asset parsing
+- Local image assets only
 
-This project is a starting point for a Flutter application.
+## Frozen Asset Expectations
+- `assets/data/recipes.csv`
+- `assets/data/ingredients.csv`
+- `assets/data/categories.csv`
+- `assets/images/` (JPG files)
 
-A few resources to get you started if this is your first Flutter project:
+## Setup
+1. Install Flutter `3.41.4` or compatible stable SDK.
+2. From project root:
+   - `flutter pub get`
+3. Run:
+   - `flutter run`
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Local Database Notes
+- SQLite DB file: `recipehub.db` (managed via `sqflite`).
+- Tables:
+  - `categories`
+  - `ingredients`
+  - `recipes`
+  - `fridge_items`
+  - `saved_recipes`
+- First app launch flow:
+  - parse CSV from `assets/data/`
+  - seed SQLite inside one transaction
+  - set SharedPreferences flag `seed_completed_v1 = true`
+- Subsequent launches read from SQLite repositories.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Main Routes
+- `/dashboard`
+- `/ingredients`
+- `/my-fridge`
+- `/saved-recipes`
+- `/recipe-results`
+- `/recipe-detail`
+- `/settings`
+
+## Development Checks
+- `flutter analyze`
+- `flutter test`
+
+## Notes
+- No cloud storage/API/Firebase/backend is used.
+- UI in this branch is intentionally minimal shell UI to validate architecture/data flow.
+- See [ARCHITECTURE.md](ARCHITECTURE.md) for design details.
