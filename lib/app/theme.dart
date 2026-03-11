@@ -20,3 +20,14 @@ ThemeData buildRecipeHubTheme() {
     ),
   );
 }
+
+ThemeData buildRecipeHubDarkTheme() {
+  final ColorScheme colorScheme = ColorScheme.fromSeed(
+    seedColor: const Color(0xFF6BBF73),
+    brightness: Brightness.dark,
+  );
+  return ThemeData(
+    colorScheme: colorScheme,
+    useMaterial3: true,
+  );
+}
