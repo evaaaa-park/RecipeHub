@@ -7,6 +7,6 @@ void main() {
     await tester.pumpWidget(const RecipeHubApp());
 
     expect(find.text('Dashboard'), findsOneWidget);
-    expect(find.text('Dashboard screen shell'), findsOneWidget);
+    expect(find.text('Ingredients'), findsOneWidget);
   });
 }

@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:recipehub/features/dashboard/dashboard_screen.dart';
+import 'package:recipehub/features/ingredients/ingredients_screen.dart';
+import 'package:recipehub/features/my_fridge/my_fridge_screen.dart';
+import 'package:recipehub/features/recipe_detail/recipe_detail_screen.dart';
+import 'package:recipehub/features/recipe_results/recipe_results_screen.dart';
+import 'package:recipehub/features/saved_recipes/saved_recipes_screen.dart';
+import 'package:recipehub/features/settings/settings_screen.dart';
 
 class AppRoutes {
   static const String dashboard = '/dashboard';
@@ -10,31 +17,12 @@ class AppRoutes {
   static const String settings = '/settings';
 
   static Map<String, WidgetBuilder> get routes => <String, WidgetBuilder>{
-        dashboard: (_) => const _RouteShell(title: 'Dashboard'),
-        ingredients: (_) => const _RouteShell(title: 'Ingredients'),
-        myFridge: (_) => const _RouteShell(title: 'My Fridge'),
-        savedRecipes: (_) => const _RouteShell(title: 'Saved Recipes'),
-        recipeResults: (_) => const _RouteShell(title: 'Recipe Results'),
-        recipeDetail: (_) => const _RouteShell(title: 'Recipe Detail'),
-        settings: (_) => const _RouteShell(title: 'Settings'),
+        dashboard: (_) => const DashboardScreen(),
+        ingredients: (_) => const IngredientsScreen(),
+        myFridge: (_) => const MyFridgeScreen(),
+        savedRecipes: (_) => const SavedRecipesScreen(),
+        recipeResults: (_) => const RecipeResultsScreen(),
+        recipeDetail: (_) => const RecipeDetailScreen(),
+        settings: (_) => const SettingsScreen(),
       };
-}
-
-class _RouteShell extends StatelessWidget {
-  const _RouteShell({required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text(
-          '$title screen shell',
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
 }
