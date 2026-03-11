@@ -1,4 +1,5 @@
 import 'package:csv/csv.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart';
 import 'package:recipehub/core/constants/app_assets.dart';
 import 'package:recipehub/data/models/models.dart';
@@ -8,6 +9,21 @@ class CsvSeedParserService {
 
   Future<List<Category>> parseCategories() async {
     final List<List<dynamic>> rows = await _loadCsvRows(AppAssets.categoriesCsv);
+    return parseCategoriesFromRows(rows);
+  }
+
+  Future<List<Ingredient>> parseIngredients() async {
+    final List<List<dynamic>> rows = await _loadCsvRows(AppAssets.ingredientsCsv);
+    return parseIngredientsFromRows(rows);
+  }
+
+  Future<List<Recipe>> parseRecipes() async {
+    final List<List<dynamic>> rows = await _loadCsvRows(AppAssets.recipesCsv);
+    return parseRecipesFromRows(rows);
+  }
+
+  @visibleForTesting
+  List<Category> parseCategoriesFromRows(List<List<dynamic>> rows) {
     if (rows.isEmpty) {
       return const <Category>[];
     }
@@ -30,8 +46,8 @@ class CsvSeedParserService {
     return categories;
   }
 
-  Future<List<Ingredient>> parseIngredients() async {
-    final List<List<dynamic>> rows = await _loadCsvRows(AppAssets.ingredientsCsv);
+  @visibleForTesting
+  List<Ingredient> parseIngredientsFromRows(List<List<dynamic>> rows) {
     if (rows.length < 2) {
       return const <Ingredient>[];
     }
@@ -68,8 +84,8 @@ class CsvSeedParserService {
     return ingredients;
   }
 
-  Future<List<Recipe>> parseRecipes() async {
-    final List<List<dynamic>> rows = await _loadCsvRows(AppAssets.recipesCsv);
+  @visibleForTesting
+  List<Recipe> parseRecipesFromRows(List<List<dynamic>> rows) {
     if (rows.length < 2) {
       return const <Recipe>[];
     }
