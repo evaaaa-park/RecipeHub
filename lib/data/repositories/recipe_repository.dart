@@ -1,12 +1,17 @@
 import 'package:recipehub/data/database/app_database.dart';
 import 'package:recipehub/data/database/db_tables.dart';
 import 'package:recipehub/data/models/recipe.dart';
+import 'package:recipehub/data/services/recipe_match_service.dart';
 
 class RecipeRepository {
-  RecipeRepository({AppDatabase? database})
-    : _database = database ?? AppDatabase.instance;
+  RecipeRepository({
+    AppDatabase? database,
+    RecipeMatchService? matchService,
+  }) : _database = database ?? AppDatabase.instance,
+       _matchService = matchService ?? const RecipeMatchService();
 
   final AppDatabase _database;
+  final RecipeMatchService _matchService;
 
   Future<List<Recipe>> getAllRecipes() async {
     final db = await _database.database;
@@ -29,5 +34,15 @@ class RecipeRepository {
       return null;
     }
     return Recipe.fromMap(rows.first);
+  }
+
+  Future<List<RecipeMatchResult>> searchRecipesBySelectedIngredients(
+    List<String> selectedIngredients,
+  ) async {
+    final List<Recipe> allRecipes = await getAllRecipes();
+    return _matchService.matchRecipes(
+      recipes: allRecipes,
+      selectedIngredients: selectedIngredients,
+    );
   }
 }
